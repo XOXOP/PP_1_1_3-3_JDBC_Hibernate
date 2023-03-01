@@ -8,10 +8,10 @@ import java.sql.*;
 
 public class Main {
 
-    private static UserService userServis = new UserServiceImpl();
+    private static UserService userServis = new UserServiceImpl();///место servicelmp - userservice в следующей задаче
 
     public static void main(String[] args) {
-        // реализуйте алгоритм
+
         userServis.createUsersTable();
         userServis.saveUser("Дэн", "Сяопин", (byte) 73);
         userServis.saveUser("Дэн", "Браун", (byte) 53);
@@ -20,8 +20,9 @@ public class Main {
 
         userServis.removeUserById(4);
         userServis.getAllUsers();
-        userServis.dropUsersTable();
+
         userServis.cleanUsersTable();
+        userServis.dropUsersTable();
     }
 }
 
