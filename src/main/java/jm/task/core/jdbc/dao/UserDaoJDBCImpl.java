@@ -8,18 +8,20 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static jm.task.core.jdbc.util.Util.getConnection;
+
 public class UserDaoJDBCImpl implements UserDao  {
 
 
-    public void createUsersTable() {
+    public void createUsersTable()  {
         try(Connection connection = Util.getConnection();
                 Statement statement = connection.createStatement()){
             statement.execute("CREATE TABLE  IF NOT EXISTS users (id BIGINT PRIMARY KEY AUTO_INCREMENT, " +
                     "name VARCHAR(255), lastName VARCHAR(255), age INT)");
-        }catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+
         }catch (SQLException e){
             e.printStackTrace();
+
         }
     }
 
@@ -27,8 +29,7 @@ public class UserDaoJDBCImpl implements UserDao  {
             try (Connection connection = Util.getConnection();
                     Statement statement = connection.createStatement()) {
                 statement.execute("DROP TABLE  IF EXISTS users");
-            }catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
+
             } catch (SQLException e) {
                 e.printStackTrace();
 
@@ -45,8 +46,7 @@ public class UserDaoJDBCImpl implements UserDao  {
                     preparedStatement.setByte(3, age);
 
                     preparedStatement.executeUpdate();
-                }catch (ClassNotFoundException e) {
-                    throw new RuntimeException(e);
+
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -55,13 +55,13 @@ public class UserDaoJDBCImpl implements UserDao  {
             }
 
     public void removeUserById(long id) {
-        try (Connection connection = Util.getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM users" +
                 " WHERE id =?")) {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
-        }catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -70,7 +70,7 @@ public class UserDaoJDBCImpl implements UserDao  {
           List<User> users = new ArrayList<>();
 
             String sql ="SELECT * FROM users";
-            try(Connection connection = Util.getConnection();
+            try(Connection connection = getConnection();
                 Statement statement = connection.createStatement();
                 ResultSet resultSet = statement.executeQuery(sql)){
                 while (resultSet.next()){
@@ -79,8 +79,7 @@ public class UserDaoJDBCImpl implements UserDao  {
                     user.setId(resultSet.getLong("id"));
                     users.add(user);
                 }
-            }catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
+
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -91,11 +90,10 @@ public class UserDaoJDBCImpl implements UserDao  {
 
 
     public void cleanUsersTable() {
-        try (Connection connection = Util.getConnection();
+        try (Connection connection = getConnection();
              Statement statement = connection.createStatement()) {
             statement.executeUpdate("TRUNCATE TABLE users");
-        }catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+
         }catch (SQLException e) {
             e.printStackTrace();
         }
